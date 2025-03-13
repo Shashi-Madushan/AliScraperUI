@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/productService";
 import ProductCard from "./ProductCard";
+import { Outlet } from "react-router-dom";
+
 
 const ProductsContent = ({ darkMode }) => {
     const [products, setProducts] = useState([]);
@@ -29,12 +31,7 @@ const ProductsContent = ({ darkMode }) => {
         <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-4">
                 <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Products</h2>
-                <button
-                    className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
-                    onClick={() => {/* Add functionality */}}
-                >
-                    Add Product
-                </button>
+               
             </div>
 
             {/* Error Message */}

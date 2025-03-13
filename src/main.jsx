@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import "./index.css";
 import PrivateRoute from "./components/PrivateRoute";
-
+import ProductEdit from "./components/ProductEdit";
 ReactDOM.createRoot(document.getElementById("root")).render(
 
     <Router>
@@ -16,6 +16,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/product/:id/edit" element={<ProductEdit  />} />
+
       </Routes>
     </Router>
 
