@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ProductEdit from "./ProductEdit";
 
 const ProductCard = ({ product, darkMode, onProductSelect }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // Get the first image from the imageLinks array
   const mainImage = product.imageLinks && product.imageLinks.length > 0

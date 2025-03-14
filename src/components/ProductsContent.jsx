@@ -62,7 +62,7 @@ const ProductsContent = ({ darkMode, onProductSelect, searchTerm }) => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
-                            <ProductCard key={product.id} product={product} darkMode={darkMode} onProductSelect={onProductSelect} />
+                            <ProductCard key={product.id} product={product} darkMode={darkMode} onProductSelect={() => onProductSelect(product)} />
                         ))
                     ) : (
                         <div className={`col-span-full text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
