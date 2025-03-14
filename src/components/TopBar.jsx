@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Bell, Moon, ChevronDown, User } from 'lucide-react';
 
-const TopBar = ({ darkMode, toggleDarkMode, title = "Dashboard" }) => {
+const TopBar = ({ darkMode, toggleDarkMode, title = "Dashboard", onSearch }) => {
+    const [searchValue, setSearchValue] = useState("");
+
+    useEffect(() => {
+        if (onSearch) {
+            onSearch(searchValue);
+        }
+    }, [searchValue, onSearch]);
+
+    const handleSearchChange = (event) => {
+        setSearchValue(event.target.value);
+    };
+
     return (
         <div
             className={`h-12 m-1 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm flex items-center justify-between px-4 fixed top-0 right-0 left-16 z-10 transition-all duration-300 ease-in-out`}
@@ -23,6 +35,8 @@ const TopBar = ({ darkMode, toggleDarkMode, title = "Dashboard" }) => {
                         darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'
                     } border focus:outline-none focus:ring-1 focus:ring-blue-500`}
                     placeholder="Search..."
+                    value={searchValue}
+                    onChange={handleSearchChange}
                 />
             </div>
 

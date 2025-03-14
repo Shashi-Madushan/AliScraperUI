@@ -3,8 +3,7 @@ import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ProductEdit from "./ProductEdit";
 
-
-const ProductCard = ({ product, darkMode }) => {
+const ProductCard = ({ product, darkMode, onProductSelect }) => {
   const navigate = useNavigate();
 
   // Get the first image from the imageLinks array
@@ -16,7 +15,7 @@ const ProductCard = ({ product, darkMode }) => {
   const ratingValue = product.rating ? parseFloat(product.rating.trim()) : 0;
 
   const handleCardClick = () => {
-    navigate(`/product/${product.id}/edit`);
+    onProductSelect(product.id);
   };
 
   return (

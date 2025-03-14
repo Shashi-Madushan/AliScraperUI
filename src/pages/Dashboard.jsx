@@ -22,6 +22,8 @@ const Dashboard = () => {
     const [darkMode, setDarkMode] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [activeItem, setActiveItem] = useState('dashboard');
+    const [selectedProductId, setSelectedProductId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
@@ -55,20 +57,34 @@ const Dashboard = () => {
         { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
     ];
 
+    const handleProductSelect = (productId) => {
+        setSelectedProductId(productId);
+    };
+
+    const handleBackToProducts = () => {
+        setSelectedProductId(null);
+    };
+
+    const handleSearch = (searchValue) => {
+        setSearchTerm(searchValue);
+    };
+
     const renderContent = () => {
+        if (selectedProductId) {
+            return <ProductEdit productId={selectedProductId} onBack={handleBackToProducts} darkMode={darkMode} />;
+        }
+
         switch (activeItem) {
             case 'dashboard':
                 return <DashboardContent darkMode={darkMode} />;
             case 'products':
-                return <ProductsContent darkMode={darkMode} />;
+                return <ProductsContent darkMode={darkMode} onProductSelect={handleProductSelect} searchTerm={searchTerm} />;
             case 'account':
                 return <AccountContent darkMode={darkMode} />;
             case 'settings':
                 return <SettingsContent darkMode={darkMode} />;
             case 'stores':
                 return <StoresContent darkMode={darkMode} />;
-            case 'product-edit':
-                return <ProductEdit />;
             default:
                 return <DashboardContent darkMode={darkMode} />;
         }
@@ -97,6 +113,7 @@ const Dashboard = () => {
                     darkMode={darkMode}
                     toggleDarkMode={toggleDarkMode}
                     title={navItems.find(item => item.id === activeItem)?.label || "Dashboard"}
+                    onSearch={handleSearch}
                 />
 
                 <div className="min-h-0 pt-16 p-4 flex-1 overflow-auto">

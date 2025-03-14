@@ -3,11 +3,11 @@ import { getProducts } from "../services/productService";
 import ProductCard from "./ProductCard";
 import { Outlet } from "react-router-dom";
 
-
-const ProductsContent = ({ darkMode }) => {
+const ProductsContent = ({ darkMode, onProductSelect, searchTerm }) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [filteredProducts, setFilteredProducts] = useState([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -26,6 +26,17 @@ const ProductsContent = ({ darkMode }) => {
 
         fetchProducts();
     }, []);
+
+    useEffect(() => {
+        if (searchTerm) {
+            const filtered = products.filter(product =>
+                product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredProducts(filtered);
+        } else {
+            setFilteredProducts(products);
+        }
+    }, [searchTerm, products]);
 
     return (
         <div className="container mx-auto px-4">
@@ -49,9 +60,9 @@ const ProductsContent = ({ darkMode }) => {
             ) : (
                 /* Products Grid - Increased number of columns */
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-                    {products.length > 0 ? (
-                        products.map((product) => (
-                            <ProductCard key={product.id} product={product} darkMode={darkMode} />
+                    {filteredProducts.length > 0 ? (
+                        filteredProducts.map((product) => (
+                            <ProductCard key={product.id} product={product} darkMode={darkMode} onProductSelect={onProductSelect} />
                         ))
                     ) : (
                         <div className={`col-span-full text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
