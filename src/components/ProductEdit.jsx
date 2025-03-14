@@ -191,7 +191,7 @@ function ProductEdit({ product, onBack, darkMode }) {
                 darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-700 border-gray-300'
               }`}
               id="currentPrice"
-              type="number"
+              type="text"
               value={formData.currentPrice}
               onChange={handleInputChange}
             />
@@ -206,7 +206,7 @@ function ProductEdit({ product, onBack, darkMode }) {
                 darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-700 border-gray-300'
               }`}
               id="originalPrice"
-              type="number"
+              type="text"
               value={formData.originalPrice}
               onChange={handleInputChange}
             />
