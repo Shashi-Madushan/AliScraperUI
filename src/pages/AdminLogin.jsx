@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
-import { User } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
-const Login = () => {
+const AdminLogin = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -16,12 +16,11 @@ const Login = () => {
         setError("");
 
         try {
-            const response = await login(username, password);
-            // Navigate based on user role
-            if (response && response.role === 'ADMIN') {
+            const response = await login(username, password, true); // true for admin login
+            if (response.userRole === 'ADMIN') {
                 navigate("/admin");
             } else {
-                navigate("/dashboard");
+                setError("Unauthorized access. Admin privileges required.");
             }
         } catch (err) {
             setError(err.response?.data?.message || "Invalid credentials");
@@ -36,10 +35,10 @@ const Login = () => {
                 {/* Header with Icon */}
                 <div className="flex flex-col items-center mb-6">
                     <div className="p-3 rounded-full bg-blue-100 mb-2">
-                        <User size={24} className="text-blue-600" />
+                        <Shield size={24} className="text-blue-600" />
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-900">User Login</h2>
-                    <p className="text-sm text-gray-600 mt-1">Access your account</p>
+                    <h2 className="text-2xl font-bold text-gray-900">Admin Login</h2>
+                    <p className="text-sm text-gray-600 mt-1">Access admin dashboard</p>
                 </div>
 
                 {/* Error Message */}
@@ -86,24 +85,17 @@ const Login = () => {
                             isLoading ? 'opacity-50 cursor-not-allowed' : ''
                         }`}
                     >
-                        {isLoading ? 'Signing in...' : 'Sign in'}
+                        {isLoading ? 'Signing in...' : 'Sign in to Admin'}
                     </button>
                 </form>
 
-                {/* Links */}
-                <div className="mt-4 flex flex-col items-center space-y-2">
+                {/* Back to User Login Link */}
+                <div className="mt-4 text-center">
                     <a 
-                        href="/register" 
+                        href="/login"
                         className="text-sm text-blue-600 hover:text-blue-500"
                     >
-                        Don't have an account? Register
-                    </a>
-                    <div className="border-t w-full my-2"></div>
-                    <a 
-                        href="/admin/login"
-                        className="text-sm text-gray-600 hover:text-gray-500"
-                    >
-                        Admin Login
+                        Back to User Login
                     </a>
                 </div>
             </div>
@@ -111,4 +103,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default AdminLogin;

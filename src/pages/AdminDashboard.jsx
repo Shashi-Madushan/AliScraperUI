@@ -1,28 +1,28 @@
-// src/pages/Dashboard.jsx
+// src/pages/AdminDashboard.jsx
 
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
 import {
-  Search, Bell, Settings, User, Moon, ChevronDown, Grid,
-  Package, CreditCard, Home, Store, LogOut
+  Users, Package, Home, Settings, LogOut, BarChart4, Shield
 } from 'lucide-react';
 import TopBar from "../components/TopBar";
-import DashboardContent from "../components/DashboardContent";
-import ProductsContent from "../components/ProductsContent";
-import AccountContent from "../components/AccountContent";
-import SettingsContent from "../components/SettingsContent";
-import StoresContent from "../components/StoresContent";
 import VerticalNavBar from "../components/VerticalNavBar";
-import ProductEdit from "../components/ProductEdit";
+import AdminDashboardContent from "../components/AdminDashboardContent.jsx";
+import AdminUsersContent from "../components/AdminUsersContent.jsx";
+import AdminProductsContent from "../components/AdminProductsContent.jsx";
+import AdminStatsContent from "../components/AdminStatsContent.jsx";
 
-const Dashboard = () => {
+
+function AdminSettingsContent(props) {
+    return null;
+}
+
+const AdminDashboard = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [darkMode, setDarkMode] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-    const [activeItem, setActiveItem] = useState('dashboard');
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [activeItem, setActiveItem] = useState('admin-dashboard');
     const [searchTerm, setSearchTerm] = useState("");
 
     const toggleDarkMode = () => {
@@ -30,8 +30,8 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
-        const path = location.pathname.split('/').pop() || 'dashboard';
-        setActiveItem(path);
+        const path = location.pathname.split('/').pop() || 'admin-dashboard';
+        setActiveItem(path === 'admin' ? 'admin-dashboard' : path);
     }, [location.pathname]);
 
     useEffect(() => {
@@ -50,44 +50,31 @@ const Dashboard = () => {
     };
 
     const navItems = [
-        { id: 'dashboard', label: 'Dashboard', icon: Home, path: '/dashboard' },
-        { id: 'products', label: 'Products', icon: Package, path: '/products' },
-        { id: 'stores', label: 'My Stores', icon: Store, path: '/stores' },
-        { id: 'account', label: 'My Account', icon: User, path: '/account' },
-        { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
+        { id: 'admin-dashboard', label: 'Dashboard', icon: Home, path: '/admin' },
+        { id: 'admin-users', label: 'Users', icon: Users, path: '/admin/users' },
+        { id: 'admin-products', label: 'Products', icon: Package, path: '/admin/products' },
+        { id: 'admin-stats', label: 'Statistics', icon: BarChart4, path: '/admin/stats' },
+        { id: 'admin-settings', label: 'Settings', icon: Settings, path: '/admin/settings' },
     ];
-
-
-    const handleProductSelect = (product) => {
-        setSelectedProduct(product);
-    };
- 
-    const handleBackToProducts = () => {
-        setSelectedProduct(null);
-    };
 
     const handleSearch = (searchValue) => {
         setSearchTerm(searchValue);
     };
  
     const renderContent = () => {
-        if (selectedProduct) {
-            return <ProductEdit product={selectedProduct} onBack={handleBackToProducts} darkMode={darkMode} />;
-        }
- 
         switch (activeItem) {
-            case 'dashboard':
-                return <DashboardContent darkMode={darkMode} />;
-            case 'products':
-                return <ProductsContent darkMode={darkMode} onProductSelect={handleProductSelect} searchTerm={searchTerm} />;
-            case 'account':
-                return <AccountContent darkMode={darkMode} />;
-            case 'settings':
-                return <SettingsContent darkMode={darkMode} />;
-            case 'stores':
-                return <StoresContent darkMode={darkMode} />;
+            case 'admin-dashboard':
+                return <AdminDashboardContent darkMode={darkMode} />;
+            case 'admin-users':
+                return <AdminUsersContent darkMode={darkMode} searchTerm={searchTerm} />;
+            case 'admin-products':
+                return <AdminProductsContent darkMode={darkMode} searchTerm={searchTerm} />;
+            case 'admin-stats':
+                return <AdminStatsContent darkMode={darkMode} />;
+            case 'admin-settings':
+                return <AdminSettingsContent darkMode={darkMode} />;
             default:
-                return <DashboardContent darkMode={darkMode} />;
+                return <AdminDashboardContent darkMode={darkMode} />;
         }
     };
 
@@ -102,6 +89,7 @@ const Dashboard = () => {
                 activeItem={activeItem}
                 setActiveItem={setActiveItem}
                 navItems={navItems}
+                logoText="ADMIN"
             />
 
             {/* Main Content Area */}
@@ -113,7 +101,7 @@ const Dashboard = () => {
                 <TopBar
                     darkMode={darkMode}
                     toggleDarkMode={toggleDarkMode}
-                    title={navItems.find(item => item.id === activeItem)?.label || "Dashboard"}
+                    title={navItems.find(item => item.id === activeItem)?.label || "Admin Dashboard"}
                     onSearch={handleSearch}
                 />
 
@@ -125,4 +113,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default AdminDashboard;
