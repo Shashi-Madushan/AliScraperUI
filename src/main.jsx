@@ -18,6 +18,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/products" element={<Dashboard />} />
+          <Route path="/stores" element={<Dashboard />} />
+          <Route path="/account" element={<Dashboard />} />
+          <Route path="/settings" element={<Dashboard />} />
           
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin/>} />

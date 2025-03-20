@@ -30,8 +30,13 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
+        // Update to handle both direct URLs and navigation
         const path = location.pathname.split('/').pop() || 'dashboard';
         setActiveItem(path);
+        // Reset selected product when not on products page
+        if (path !== 'products') {
+            setSelectedProduct(null);
+        }
     }, [location.pathname]);
 
     useEffect(() => {
@@ -69,9 +74,16 @@ const Dashboard = () => {
     const handleSearch = (searchValue) => {
         setSearchTerm(searchValue);
     };
+
+    // Update the navigation handler to use full paths
+    const handleNavItemClick = (itemId) => {
+        setActiveItem(itemId);
+        setSelectedProduct(null);
+        navigate(`/${itemId}`);
+    };
  
     const renderContent = () => {
-        if (selectedProduct) {
+        if (selectedProduct && activeItem === 'products') {
             return <ProductEdit product={selectedProduct} onBack={handleBackToProducts} darkMode={darkMode} />;
         }
  
@@ -100,7 +112,7 @@ const Dashboard = () => {
                 handleMouseEnter={handleMouseEnter}
                 handleMouseLeave={handleMouseLeave}
                 activeItem={activeItem}
-                setActiveItem={setActiveItem}
+                setActiveItem={handleNavItemClick} // Updated to use new handler
                 navItems={navItems}
             />
 
