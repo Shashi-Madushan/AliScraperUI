@@ -16,8 +16,8 @@ const TopBar = ({ darkMode, toggleDarkMode, title = "Dashboard", onSearch }) => 
 
     return (
         <div
-            className={`h-12 m-1 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm flex items-center justify-between px-4 fixed top-0 right-0 left-16 z-10 transition-all duration-300 ease-in-out`}
-            style={{ left: 'var(--sidebar-width, 4rem)' }}
+            className={`h-12 m-1 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm flex items-center justify-between px-4 fixed top-0 right-6 left-16 z-10 transition-all duration-300 ease-in-out`}
+            style={{ left: 'var(--sidebar-width, 5rem)' }}
         >
             {/* Page Title */}
             <div>

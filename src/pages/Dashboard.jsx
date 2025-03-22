@@ -89,7 +89,7 @@ const Dashboard = () => {
  
         switch (activeItem) {
             case 'dashboard':
-                return <DashboardContent darkMode={darkMode} />;
+                return <DashboardContent darkMode={darkMode}   />;
             case 'products':
                 return <ProductsContent darkMode={darkMode} onProductSelect={handleProductSelect} searchTerm={searchTerm} />;
             case 'account':
