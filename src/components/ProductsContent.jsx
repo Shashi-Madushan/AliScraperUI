@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProducts } from "../services/productService";
+import { getProducts } from "../services/ProductService";
 import ProductCard from "./ProductCard";
 import { Grid, List } from "lucide-react";
 
@@ -10,20 +10,22 @@ const ProductsContent = ({ darkMode, onProductSelect, searchTerm }) => {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [viewMode, setViewMode] = useState("grid");
 
+
+    const fetchProducts = async () => {
+        try {
+            setLoading(true);
+            const data = await getProducts();
+            setProducts(data);
+            setError("");
+        } catch (err) {
+            setError("Failed to fetch products. Please try again.");
+            console.error("Error fetching products:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                setLoading(true);
-                const data = await getProducts();
-                setProducts(data);
-                setError("");
-            } catch (err) {
-                setError("Failed to fetch products. Please try again.");
-                console.error("Error fetching products:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
 
         fetchProducts();
     }, []);
@@ -136,7 +138,11 @@ const ProductsContent = ({ darkMode, onProductSelect, searchTerm }) => {
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
-                                <ProductCard key={product.id} product={product} darkMode={darkMode} onProductSelect={() => onProductSelect(product)} />
+                                <ProductCard key={product.id}
+                                product={product} 
+                                darkMode={darkMode} 
+                                onProductSelect={() => onProductSelect(product)} 
+                                onDelete={fetchProducts}  />
                             ))
                         ) : (
                             <div className={`col-span-full text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
