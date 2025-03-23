@@ -19,15 +19,29 @@ import ProductEdit from "../components/ProductEdit";
 const Dashboard = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        const savedMode = localStorage.getItem('darkMode');
+        return savedMode ? JSON.parse(savedMode) : false;
+    });
     const [isExpanded, setIsExpanded] = useState(false);
     const [activeItem, setActiveItem] = useState('dashboard');
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
 
     const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
+        const newMode = !darkMode;
+        setDarkMode(newMode);
+        localStorage.setItem('darkMode', JSON.stringify(newMode));
     };
+
+    // Effect to apply dark mode to document root
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [darkMode]);
 
     useEffect(() => {
         // Update to handle both direct URLs and navigation

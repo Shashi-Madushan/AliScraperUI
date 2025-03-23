@@ -33,7 +33,7 @@ const DashboardContent = ({ darkMode }) => {
 
         try {
             setIsScrapingUrl(true);
-            await apiClient.post('/products/scrape', { url: productUrl });
+            await apiClient.post(`/scrape/aliexpress?url=${encodeURIComponent(productUrl)}`);
             setProductUrl('');
             const response = await apiClient.get('/dashboard');
             setDashboardData(response.data);
@@ -73,7 +73,6 @@ const DashboardContent = ({ darkMode }) => {
         <div className={`min-h-screen p-6 transition-colors duration-200 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold">Dashboard</h1>
                     <p className={`text-lg mt-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                         Welcome back, {dashboardData?.productCount?.userName || 'User'}!
                     </p>
@@ -87,7 +86,7 @@ const DashboardContent = ({ darkMode }) => {
                         type="text"
                         value={productUrl}
                         onChange={(e) => setProductUrl(e.target.value)}
-                        placeholder="Enter product URL to scrape"
+                        placeholder="eg:- https://www.aliexpress.com/item/1005007688294161.html"
                         className={`flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                             darkMode 
                                 ? 'bg-gray-700 text-white placeholder-gray-400 border-gray-600' 
@@ -118,7 +117,13 @@ const DashboardContent = ({ darkMode }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                {[
+                {[ {
+                        icon: <User className={`h-6 w-6 ${darkMode ? 'text-white' : 'text-purple-600'}`} />,
+                        title: "User",
+                        value: dashboardData?.productCount?.userName || 'N/A',
+                        bgColor: darkMode ? 'bg-gray-800' : 'bg-white',
+                        iconBg: darkMode ? 'bg-purple-900' : 'bg-purple-100'
+                    },
                     {
                         icon: <Package className={`h-6 w-6 ${darkMode ? 'text-white' : 'text-indigo-600'}`} />,
                         title: "Total Products",
@@ -132,14 +137,8 @@ const DashboardContent = ({ darkMode }) => {
                         value: dashboardData?.connectedStores?.length || 0,
                         bgColor: darkMode ? 'bg-gray-800' : 'bg-white',
                         iconBg: darkMode ? 'bg-green-900' : 'bg-green-100'
-                    },
-                    {
-                        icon: <User className={`h-6 w-6 ${darkMode ? 'text-white' : 'text-purple-600'}`} />,
-                        title: "User",
-                        value: dashboardData?.productCount?.userName || 'N/A',
-                        bgColor: darkMode ? 'bg-gray-800' : 'bg-white',
-                        iconBg: darkMode ? 'bg-purple-900' : 'bg-purple-100'
                     }
+                   
                 ].map((item, index) => (
                     <div key={index} className={`${item.bgColor} p-6 rounded-xl shadow-md`}>
                         <div className="flex items-center">

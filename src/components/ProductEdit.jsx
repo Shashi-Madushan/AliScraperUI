@@ -11,7 +11,7 @@ function ProductEdit({ product, onBack, darkMode }) {
     soldCount: '',
     imageLinks: [],
     specifications: {},
-    description: ''
+    description: []
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,9 +27,7 @@ function ProductEdit({ product, onBack, darkMode }) {
         soldCount: product.soldCount || '',
         imageLinks: product.imageLinks || [],
         specifications: product.specifications || {},
-        description: Array.isArray(product.description) && product.description.length > 0 
-          ? product.description[0]?.text 
-          : ''
+        description: product.description?.[0] || { text: '', images: [] } // Set both text and images
       });
     }
   }, [product]);
@@ -325,21 +323,37 @@ function ProductEdit({ product, onBack, darkMode }) {
             }`}
             id="description"
             rows="4"
-            value={formData.description}
-            onChange={handleInputChange}
+            value={formData.description.text || ''}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                description: {
+                  ...prev.description,
+                  text: e.target.value,
+                },
+              }))
+            }
           />
-          
+
           <h4 className="text-md font-medium mb-2">Description Images:</h4>
           <div className="grid grid-cols-4 gap-2">
-            {formData.imageLinks.map((link, index) => (
+            {formData.description.images?.map((link, index) => (
               <div key={`desc-${index}`} className="relative bg-gray-200 aspect-square max-h-35">
-                <img 
-                  src={link || "/api/placeholder/100/100"} 
-                  alt={`Description Image ${index + 1}`} 
+                <img
+                  src={link || "/api/placeholder/100/100"}
+                  alt={`Description Image ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
-                <button 
-                  onClick={() => removeImage(index)}
+                <button
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: {
+                        ...prev.description,
+                        images: prev.description.images.filter((_, i) => i !== index),
+                      },
+                    }))
+                  }
                   className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
                 >
                   <X size={12} />
