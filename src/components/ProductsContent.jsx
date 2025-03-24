@@ -48,47 +48,57 @@ const ProductsContent = ({ darkMode, onProductSelect, searchTerm }) => {
     const renderListItem = (product) => (
         <div 
             key={product.id}
-            className={`${darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-50'} rounded-md shadow-sm p-3 mb-2 flex items-center hover:shadow-md transition-all duration-300 cursor-pointer`}
-            onClick={() => onProductSelect(product)}
+            className={`${darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-50'} rounded-md shadow-sm p-3 mb-2 flex items-center justify-between hover:shadow-md transition-all duration-300 cursor-pointer`}
         >
-            {/* Product Image */}
-            <div className="h-16 w-16 overflow-hidden relative flex-shrink-0">
-                <img
-                    src={product.imageLinks && product.imageLinks.length > 0 ? product.imageLinks[0] : 'https://via.placeholder.com/220x220?text=No+Image'}
-                    alt={product.productName}
-                    className="w-full h-full object-cover rounded"
-                />
-                {product.discount && (
-                    <div className="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-bold px-1 py-0.5 rounded-sm">
-                        {product.discount}
-                    </div>
-                )}
-            </div>
-    
             {/* Product Details */}
-            <div className="ml-3 flex-grow">
-                <h3 className={`text-sm font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'} mb-1 line-clamp-1`}>
-                    {product.productName}
-                </h3>
-    
-                <div className="flex items-baseline mb-1">
-                    <span className={`text-sm font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'} mr-2`}>
-                        {product.currentPrice}
-                    </span>
-                    {product.originalPrice && (
-                        <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} line-through`}>
-                            {product.originalPrice}
-                        </span>
-                    )}
+            <div 
+                className="flex items-center flex-grow"
+                onClick={() => onProductSelect(product)}
+            >
+                {/* Product Image */}
+                <div className="h-16 w-16 overflow-hidden relative flex-shrink-0">
+                    <img
+                        src={product.imageLinks && product.imageLinks.length > 0 ? product.imageLinks[0] : 'https://via.placeholder.com/220x220?text=No+Image'}
+                        alt={product.productName}
+                        className="w-full h-full object-cover rounded"
+                    />
+          
                 </div>
-    
-                <div className={`flex items-center text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    <div className="flex items-center">
-                        <span className="mr-2">Rating: {parseFloat(product.rating || 0).toFixed(1)}</span>
-                        <span>Sold: {product.soldCount}</span>
+        
+                <div className="ml-3 flex-grow">
+                    <h3 className={`text-sm font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'} mb-1 line-clamp-1`}>
+                        {product.productName}
+                    </h3>
+        
+                    <div className="flex items-baseline mb-1">
+                        <span className={`text-sm font-bold ${darkMode ? 'text-gray-100' : 'text-gray-900'} mr-2`}>
+                            {product.currentPrice}
+                        </span>
+                        {product.originalPrice && (
+                            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} line-through`}>
+                                {product.originalPrice}
+                            </span>
+                        )}
+                    </div>
+        
+                    <div className={`flex items-center text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        <div className="flex items-center">
+                            <span className="mr-2">Rating: {parseFloat(product.rating || 0).toFixed(1)}</span>
+                            <span>Sold: {product.soldCount}</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {/* Delete Button */}
+            <button
+                onClick={async () => {
+                    await fetchProducts(); // Refresh products after deletion
+                }}
+                className={`ml-3 px-3 py-1 text-sm font-medium rounded ${darkMode ? 'bg-red-600 text-white hover:bg-red-500' : 'bg-red-500 text-white hover:bg-red-400'}`}
+            >
+                Delete
+            </button>
         </div>
     );
     
