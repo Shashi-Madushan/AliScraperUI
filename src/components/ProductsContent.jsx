@@ -103,7 +103,7 @@ const ProductsContent = ({ darkMode, onProductSelect, searchTerm }) => {
     );
     
     return (
-        <div className="container mx-auto px-4">
+        <div className={` p-4  min-h-screen  rounded-xl transition-colors duration-200 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
             <div className="flex justify-between items-center mb-4">
                 <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Products</h2>
                 

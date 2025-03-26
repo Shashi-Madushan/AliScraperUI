@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Store, Edit2, Trash2, RefreshCw } from 'lucide-react';
+import { Plus, Store, Edit2, Trash2, RefreshCw, Loader } from 'lucide-react';
 import {apiClient} from '../services/authService'
 
 const StoresContent = ({ darkMode }) => {
@@ -7,6 +7,7 @@ const StoresContent = ({ darkMode }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedStore, setSelectedStore] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
         storeName: '',
         storeUrl: '',
@@ -23,11 +24,14 @@ const StoresContent = ({ darkMode }) => {
     }, []);
 
     const fetchStores = async () => {
+        setLoading(true);
         try {
             const response = await apiClient.get('/stores');
             setStores(response.data);
         } catch (error) {
             console.error('Error fetching stores:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -85,7 +89,7 @@ const StoresContent = ({ darkMode }) => {
 
 
     return (
-        <div className={`p-6 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-gray-50'} transition-colors duration-200`}>
+        <div className={`p-6 min-h-screen rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-gray-50'} transition-colors duration-200`}>
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
             <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Connected Stores</h1>
@@ -103,68 +107,85 @@ const StoresContent = ({ darkMode }) => {
             </div>
         </div>
 
-        {/* Stores Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {stores.map((store) => (
-                <div
-                    key={store.id}
-                    className={`p-6 rounded-lg border ${darkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'} shadow-sm transition-colors duration-200`}
-                >
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="flex items-center gap-3">
-                            <Store className={`${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-                            <div>
-                                <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{store.storeName}</h3>
-                                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{store.storeUrl}</p>
+        {/* Stores Grid with Loading State */}
+        {loading ? (
+            <div className="flex flex-col items-center justify-center h-64">
+                <Loader className={`animate-spin w-10 h-10 mb-4 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                <p className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Loading stores...</p>
+            </div>
+        ) : stores.length === 0 ? (
+            <div className={`p-8 text-center rounded-lg border ${darkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'}`}>
+                <p className={`text-lg mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>No stores found</p>
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Add a store to start managing your product imports
+                </p>
+            </div>
+        ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {stores.map((store) => (
+                    <div
+                        key={store.id}
+                        className={`p-6 rounded-lg border ${darkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'} shadow-sm transition-colors duration-200`}
+                    >
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="flex items-center gap-3">
+                                <Store className={`${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                                <div>
+                                    <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{store.storeName}</h3>
+                                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{store.storeUrl}</p>
+                                </div>
+                            </div>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => verifyConnection(store.id)}
+                                    className={`p-2 ${darkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-500 hover:text-blue-600'} transition-colors`}
+                                >
+                                    <RefreshCw size={18} />
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSelectedStore(store);
+                                        setFormData(store);
+                                        setIsModalOpen(true);
+                                    }}
+                                    className={`p-2 ${darkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-500 hover:text-blue-600'} transition-colors`}
+                                >
+                                    <Edit2 size={18} />
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSelectedStore(store);
+                                        setIsDeleteModalOpen(true);
+                                    }}
+                                    className={`p-2 ${darkMode ? 'text-gray-400 hover:text-red-400' : 'text-gray-500 hover:text-red-600'} transition-colors`}
+                                >
+                                    <Trash2 size={18} />
+                                </button>
                             </div>
                         </div>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => verifyConnection(store.id)}
-                                className={`p-2 ${darkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-500 hover:text-blue-600'} transition-colors`}
-                            >
-                                <RefreshCw size={18} />
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setSelectedStore(store);
-                                    setFormData(store);
-                                    setIsModalOpen(true);
-                                }}
-                                className={`p-2 ${darkMode ? 'text-gray-400 hover:text-blue-400' : 'text-gray-500 hover:text-blue-600'} transition-colors`}
-                            >
-                                <Edit2 size={18} />
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setSelectedStore(store);
-                                    setIsDeleteModalOpen(true);
-                                }}
-                                className={`p-2 ${darkMode ? 'text-gray-400 hover:text-red-400' : 'text-gray-500 hover:text-red-600'} transition-colors`}
-                            >
-                                <Trash2 size={18} />
-                            </button>
+                        <div className="flex items-center gap-2 mt-4">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                store.connected
+                                    ? darkMode ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-800'
+                                    : darkMode ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800'
+                            }`}>
+                                {store.connected ? 'Connected' : 'Disconnected'}
+                            </span>
+                            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                Platform: {store.platformType}
+                            </span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 mt-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            store.connected
-                                ? darkMode ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-800'
-                                : darkMode ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800'
-                        }`}>
-                            {store.connected ? 'Connected' : 'Disconnected'}
-                        </span>
-                        <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                            Platform: {store.platformType}
-                        </span>
-                    </div>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+        )}
 
         {/* Add/Edit Store Modal */}
         {isModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className={`fixed inset-0 ${darkMode ? 'bg-black' : 'bg-white'} bg-opacity-50 flex items-center justify-center p-4 z-50`} >
+                <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg p-6 max-w-md w-full shadow-xl transition-colors duration-200`}>
+                    hello
+                </div>
                 <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg p-6 max-w-md w-full shadow-xl transition-colors duration-200`}>
                     <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                         {selectedStore ? 'Edit Store' : 'Add New Store'}

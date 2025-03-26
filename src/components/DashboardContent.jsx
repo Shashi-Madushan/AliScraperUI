@@ -55,7 +55,7 @@ const DashboardContent = ({ darkMode }) => {
 
     if (loading) {
         return (
-            <div className={`flex items-center justify-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+            <div className={`flex rounded-xl items-center justify-center h-screen ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
             </div>
         );
@@ -63,14 +63,14 @@ const DashboardContent = ({ darkMode }) => {
 
     if (error) {
         return (
-            <div className={`flex items-center justify-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+            <div className={`flex rounded-xl items-center justify-center h-screen ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
                 <div className="text-red-500 text-xl">{error}</div>
             </div>
         );
     }
 
     return (
-        <div className={`min-h-screen p-6 transition-colors duration-200 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+        <div className={`min-h-screen p-6 rounded-xl transition-colors duration-200 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <p className={`text-lg mt-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>

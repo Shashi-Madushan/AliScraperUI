@@ -133,7 +133,7 @@ const Dashboard = () => {
             {/* Main Content Area */}
             <div
                 className="flex-1 flex flex-col transition-all duration-300 ease-in-out"
-                style={{ marginLeft: isExpanded ? '14rem' : '4rem' }}
+                style={{ marginLeft: isExpanded ? '12rem' : '4rem' }}
             >
                 {/* Top Bar Component */}
                 <TopBar

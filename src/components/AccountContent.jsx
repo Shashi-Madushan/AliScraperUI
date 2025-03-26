@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Key, AlertCircle, Trash2 } from "lucide-react";
-import { apiClient ,logout } from "../services/authService";
+import { apiClient, logout } from "../services/authService";
 
 const AccountContent = ({ darkMode }) => {
   const [userData, setUserData] = useState(null);
@@ -82,21 +82,25 @@ const AccountContent = ({ darkMode }) => {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className={`flex rounded-xl ${
+        darkMode ? "bg-gray-800" : "bg-white"
+      } items-center justify-center min-h-screen`}>
         Loading...
       </div>
     );
   if (!userData)
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className={`flex rounded-xl ${
+        darkMode ? "bg-gray-800" : "bg-white"
+      } items-center justify-center min-h-screen`}>
         No user data found
       </div>
     );
 
   return (
     <div
-      className={`min-h-screen p-6 ${
-        darkMode ? "bg-gray-900" : "bg-white"
+      className={`min-h-screen rounded-xl p-6 ${
+        darkMode ? "bg-gray-800" : "bg-white"
       } transition-colors duration-200`}
     >
       <div className="max-w-3xl mx-auto space-y-8">
@@ -128,32 +132,31 @@ const AccountContent = ({ darkMode }) => {
             Personal Information
           </h2>
           <div className="space-y-4">
-          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
               <User
                 className={`w-5 h-5 ${
                   darkMode ? "text-gray-400" : "text-gray-500"
                 }`}
               />{" "}
-              
               <div>
                 <p
                   className={`text-sm ${
                     darkMode ? "text-gray-400" : "text-gray-500"
                   }`}
                 >
-                   Use Name 
+                  Use Name
                 </p>
                 <p className={darkMode ? "text-white" : "text-gray-900"}>
                   {userData.username || "Not provided"}
                 </p>
               </div>
-            </div>            <div className="flex items-center space-x-4">
+            </div>{" "}
+            <div className="flex items-center space-x-4">
               <User
                 className={`w-5 h-5 ${
                   darkMode ? "text-gray-400" : "text-gray-500"
                 }`}
               />{" "}
-              
               <div>
                 <p
                   className={`text-sm ${
