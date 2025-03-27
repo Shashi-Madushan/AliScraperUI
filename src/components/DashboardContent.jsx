@@ -134,7 +134,7 @@ const DashboardContent = ({ darkMode }) => {
                     {
                         icon: <ShoppingBag className={`h-6 w-6 ${darkMode ? 'text-white' : 'text-green-600'}`} />,
                         title: "Connected Stores",
-                        value: dashboardData?.connectedStores?.length || 0,
+                        value: dashboardData?.connectedStores || 0,
                         bgColor: darkMode ? 'bg-gray-800' : 'bg-white',
                         iconBg: darkMode ? 'bg-green-900' : 'bg-green-100'
                     }
