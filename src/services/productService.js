@@ -28,3 +28,14 @@ export const deleteProduct = async (id) => {
     throw error;
   }
 };
+
+export const updateProduct = async (id, productDto) => {
+    try {
+        // The productDto parameter is sent as the request body in this PUT request
+        const response = await apiClient.put(`/products/${id}`, productDto);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating product:', error);
+        throw error.response ? error.response.data : error;
+    }
+};
