@@ -31,7 +31,7 @@ const AdminUsersContent = ({ darkMode, searchTerm }) => {
         if (confirmDelete === userId) {
             try {
                 await deleteUser(userId);
-                setUsers(users.filter(user => user.id !== userId));
+               fetchUsers();
                 setConfirmDelete(null);
             } catch (err) {
                 setError('Failed to delete user');
@@ -176,11 +176,11 @@ const AdminUsersContent = ({ darkMode, searchTerm }) => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                            user.active
+                                            user.status === 'ACTIVE'
                                                 ? darkMode ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-800'
                                                 : darkMode ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800'
                                         }`}>
-                                            {user.active ? 'Active' : 'Inactive'}
+                                            {user.status || 'INACTIVE'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

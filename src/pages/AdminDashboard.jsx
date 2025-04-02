@@ -11,22 +11,24 @@ import AdminDashboardContent from "../components/AdminDashboardContent.jsx";
 import AdminUsersContent from "../components/AdminUsersContent.jsx";
 import AdminProductsContent from "../components/AdminProductsContent.jsx";
 import AdminStatsContent from "../components/AdminStatsContent.jsx";
+import AccountContent from "../components/AccountContent";
 
 
-function AdminSettingsContent(props) {
-    return null;
-}
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [darkMode, setDarkMode] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        const savedMode = localStorage.getItem('darkMode');
+        return savedMode ? JSON.parse(savedMode) : false;
+    });    const [isExpanded, setIsExpanded] = useState(false);
     const [activeItem, setActiveItem] = useState('admin-dashboard');
     const [searchTerm, setSearchTerm] = useState("");
 
     const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
+        const newMode = !darkMode;
+        setDarkMode(newMode);
+        localStorage.setItem('darkMode', JSON.stringify(newMode));
     };
 
     useEffect(() => {
@@ -72,7 +74,7 @@ const AdminDashboard = () => {
             case 'admin-stats':
                 return <AdminStatsContent darkMode={darkMode} />;
             case 'admin-settings':
-                return <AdminSettingsContent darkMode={darkMode} />;
+                return <AccountContent darkMode={darkMode} />;
             default:
                 return <AdminDashboardContent darkMode={darkMode} />;
         }

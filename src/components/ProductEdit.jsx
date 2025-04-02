@@ -313,7 +313,6 @@ function ProductEdit({ product, onBack, darkMode }) {
     
       await apiClient.post(`/woocommerce/import-product?storeId=${selectedStore}`, 
         productData
-        
       );
       
       // Reset states after successful import
@@ -974,9 +973,9 @@ function ProductEdit({ product, onBack, darkMode }) {
                             htmlFor={`store-${store.id || store._id}`}
                             className="flex-grow cursor-pointer"
                           >
-                            <div className="font-medium">{store.name || store.store_name || "Unnamed Store"}</div>
+                            <div className="font-medium">{store.storeName || store.name || store.store_name || "Unnamed Store"}</div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {store.url || store.website || store.store_url || "No URL provided"}
+                              {store.storeUrl || store.url || store.website || store.store_url || "No URL provided"}
                             </div>
                           </label>
                         </div>
