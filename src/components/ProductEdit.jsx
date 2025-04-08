@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, X, Trash2, Code, AlertCircle, Store } from "lucide-react";
+import { ArrowLeft, X, Trash2, Code, AlertCircle, Store, CheckCircle } from "lucide-react";
 import { apiClient } from "../services/authService";
 import {updateProduct} from "../services/productService"
 
@@ -31,6 +31,7 @@ function ProductEdit({ product, onBack, darkMode }) {
   const [storeLoading, setStoreLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [storeImportLoading, setStoreImportLoading] = useState(false);
+  const [importStatus, setImportStatus] = useState({ inProgress: false, store: null, success: false, message: "" });
 
   useEffect(() => {
     if (product) {
@@ -304,26 +305,106 @@ function ProductEdit({ product, onBack, darkMode }) {
   const handleImportToStore = async () => {
     if (!selectedStore) return;
     
-    setStoreImportLoading(true);
+    const selectedStoreName = stores.find(store => (store.id || store._id) === selectedStore)?.storeName || 
+                             stores.find(store => (store.id || store._id) === selectedStore)?.name || 
+                             "selected store";
+    
+    // Close modals first
     setShowStoreModal(false);
     setShowConfirmation(false);
     
+    // Set import status to in progress
+    setImportStatus({ 
+      inProgress: true, 
+      store: selectedStoreName, 
+      success: false, 
+      message: `Adding product to ${selectedStoreName}...` 
+    });
+    setStoreImportLoading(true);
+    
     try {
       const productData = prepareProductData();
-    
-      await apiClient.post(`/woocommerce/import-product?storeId=${selectedStore}`, 
+      
+      // Show initial notification
+      showNotification(`Starting import to ${selectedStoreName}...`, "info");
+      
+      // Make the API call
+      const response = await apiClient.post(`/woocommerce/import-product?storeId=${selectedStore}`, 
         productData
       );
       
+      // Show success notification
+      showNotification(`Product successfully added to ${selectedStoreName}`, "success");
+      
+      // Update status
+      setImportStatus({
+        inProgress: false,
+        store: selectedStoreName,
+        success: true,
+        message: response.data?.message || `Successfully imported product to ${selectedStoreName}`
+      });
+      
       // Reset states after successful import
       setSelectedStore(null);
-      setShowConfirmation(false);
     } catch (err) {
       console.error("Error importing product to store:", err);
-      setError(`Failed to import product to store: ${err.response?.data?.message || err.message}`);
+      
+      // Show error notification
+      const errorMessage = err.response?.data?.message || err.message || "Unknown error occurred";
+      showNotification(`Import failed: ${errorMessage}`, "error");
+      
+      // Update status
+      setImportStatus({
+        inProgress: false,
+        store: selectedStoreName,
+        success: false,
+        message: `Failed: ${errorMessage}`
+      });
+      
+      // Don't set global error as it would disrupt the UI
+      // Instead just log the error and show notification
     } finally {
       setStoreImportLoading(false);
     }
+  };
+
+  // Helper function to show notifications
+  const showNotification = (message, type = "info") => {
+    // Create notification element
+    const notification = document.createElement("div");
+    notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg flex items-center ${
+      type === "success" ? "bg-green-500" : 
+      type === "error" ? "bg-red-500" : 
+      "bg-blue-500"
+    } text-white z-50 animate-fade-in-up`;
+    
+    // Add icon based on notification type
+    let icon = "";
+    if (type === "success") {
+      icon = `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+    } else if (type === "error") {
+      icon = `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+    } else {
+      icon = `<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+    }
+    
+    notification.innerHTML = `
+      <div class="flex items-center">
+        ${icon}
+        <span>${message}</span>
+      </div>
+    `;
+    
+    // Add to DOM
+    document.body.appendChild(notification);
+    
+    // Remove after 5 seconds
+    setTimeout(() => {
+      notification.classList.add("animate-fade-out");
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 500);
+    }, 5000);
   };
 
   const closeStoreModal = () => {
@@ -830,10 +911,35 @@ function ProductEdit({ product, onBack, darkMode }) {
         <button
           className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center"
           onClick={handleAddToStore}
+          disabled={storeImportLoading}
         >
-          <Store size={18} className="mr-2" />
-          Add to Store
+          {storeImportLoading ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+              Importing...
+            </>
+          ) : (
+            <>
+              <Store size={18} className="mr-2" />
+              Add to Store
+            </>
+          )}
         </button>
+        {importStatus.inProgress && (
+          <div className="mr-4 flex items-center text-yellow-500">
+            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-yellow-500 mr-2"></div>
+            <span className="text-sm">Adding to {importStatus.store}...</span>
+          </div>
+        )}
+        {importStatus.message && !importStatus.inProgress && (
+          <div className={`mr-4 flex items-center ${importStatus.success ? 'text-green-500' : 'text-red-500'}`}>
+            {importStatus.success ? 
+              <CheckCircle size={16} className="mr-2" /> : 
+              <AlertCircle size={16} className="mr-2" />
+            }
+            <span className="text-sm">{importStatus.message}</span>
+          </div>
+        )}
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           onClick={handleUpdateProduct}
