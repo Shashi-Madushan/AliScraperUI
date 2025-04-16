@@ -31,11 +31,11 @@ const VerticalNavBar = ({ darkMode, isExpanded, handleMouseEnter, handleMouseLea
       >
         {/* Logo */}
         <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-center">
-          <div className={`w-7 h-7 rounded-full flex items-center justify-center ${darkMode ? 'bg-blue-600' : 'bg-blue-500'} `}>
-            <span className="text-white font-bold">AS</span>
+          <div className={`w-8 h-8 rounded-full overflow-hidden flex items-center justify-center ${darkMode ? 'bg-blue-600' : 'bg-blue-500'}`}>
+            <img src="/productgogologo.png" alt="Logo" className="w-full h-full object-cover rounded-full" />
           </div>
-          <span className={`ml-2 font-bold text-lg whitespace-nowrap transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>
-            FREE SCRAPER
+          <span className={`ml-2 font-bold font-sm text-base whitespace-nowrap transition-opacity duration-300 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>
+            PRODUCT GO
           </span>
         </div>
 
