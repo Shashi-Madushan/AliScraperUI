@@ -62,7 +62,7 @@ Free Scraper is a powerful dropshipping automation tool that helps e-commerce en
     <tr>
       <td>
         <p><strong>User Registration</strong></p>
-        <img src="readmeImages/User register.png" alt="User Register" style="max-width: 100%; height: auto;"/>
+        <img src="readmeImages/userregister.png" alt="User Register" style="max-width: 100%; height: auto;"/>
       </td>
       <td></td>
     </tr>
@@ -80,11 +80,11 @@ Free Scraper is a powerful dropshipping automation tool that helps e-commerce en
     <tr>
       <td>
         <p><strong>User Dashboard (Light)</strong></p>
-        <img src="readmeImages/User dash light.png" alt="User Dashboard Light" style="max-width: 100%; height: auto;"/>
+        <img src="readmeImages/userdash1.png" alt="User Dashboard Light" style="max-width: 100%; height: auto;"/>
       </td>
       <td>
         <p><strong>User Dashboard (Dark)</strong></p>
-        <img src="readmeImages/User dashboard.png" alt="User Dashboard Dark" style="max-width: 100%; height: auto;"/>
+        <img src="readmeImages/userdashbord2.png" alt="User Dashboard Dark" style="max-width: 100%; height: auto;"/>
       </td>
     </tr>
     <tr>
