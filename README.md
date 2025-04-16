@@ -24,7 +24,7 @@ Free Scraper is a powerful dropshipping automation tool that helps e-commerce en
 
 <div align="center">
   <a href="https://youtu.be/C0yxWhFte68">
-    <img src="https://img.youtube.com/vi/C0yxWhFte68/maxresdefault.jpg" alt="Free Scraper Demo Video" style="max-width: 100%; height: auto;">
+    <img src="https://img.youtube.com/vi/C0yxWhFte68/hqdefault.jpg" alt="Free Scraper Demo Video" style="max-width: 100%; height: auto;">
   </a>
   <p><strong>▶️ Click to watch the demo video</strong></p>
 </div>
