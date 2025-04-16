@@ -20,6 +20,20 @@ Free Scraper is a powerful dropshipping automation tool that helps e-commerce en
 - **Store Management**: Connect and manage multiple e-commerce stores  
 - **Dark Mode Support**: Comfortable viewing experience in any lighting condition  
 
+## 🎥 Demo Video
+
+<div align="center">
+  <iframe 
+    width="800" 
+    height="450" 
+    src="https://www.youtube.com/embed/C0yxWhFte68" 
+    title="Free Scraper Demo Video"
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+  </iframe>
+</div>
+
 ## 📸 Interface Overview
 
 ### Landing & Authentication
